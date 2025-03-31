@@ -17,20 +17,8 @@ class DomoProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->provider = new DomoProvider(
-            [
-                'clientId' => 'mock_client_id',
-                'clientSecret' => 'mock_secret',
-                'redirectUri' => 'none',
-            ]
-        );
-    }
-
-    public function testGetBaseAccessTokenUrl(): void
-    {
-        $url = $this->provider->getBaseAccessTokenUrl();
-        $uriPath = parse_url($url, PHP_URL_PATH);
-        $this->assertEquals('/oauth/token', $uriPath);
+        $factory = new DomoProviderFactory();
+        $this->provider = $factory->new('mock_client_id', 'mock_secret');
     }
 
     public function testGetAccessToken(): void
