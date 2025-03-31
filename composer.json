@@ -1,0 +1,45 @@
+{
+    "name": "compwright/oauth2-github",
+    "description": "Domo OAuth 2.0 Client Provider for The PHP League OAuth2-Client",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jonathon Hill",
+            "email": "jonathon@compwright.com",
+            "homepage": "https://github.com/compwright"
+        }
+    ],
+    "keywords": [
+        "oauth",
+        "oauth2",
+        "client",
+        "authorization",
+        "authorisation",
+        "domo"
+    ],
+    "require": {
+        "php": "^8.3 || ^8.4",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.74",
+        "guzzlehttp/guzzle": "^7.9",
+        "guzzlehttp/psr7": "^2.7",
+        "league/oauth2-client": "^2.0",
+        "phpunit/phpunit": "^12.0",
+        "phpstan/phpstan": "^2.1"
+    },
+    "suggest": {
+        "league/oauth2-client": "Required for use with this package"
+    },
+    "autoload": {
+        "psr-4": {
+            "Compwright\\OAuth2\\Domo\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Compwright\\OAuth2\\Domo\\": "tests/"
+        }
+    }
+}

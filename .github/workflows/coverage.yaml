@@ -1,0 +1,39 @@
+name: Coverage
+
+on:
+  pull_request:
+  push:
+    branches: [ master ]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php: [8.4]
+        os: [ubuntu-latest]
+
+    name: PHP ${{ matrix.php }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v1
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php }}
+        coverage: xdebug
+
+    - name: Install dependencies
+      run: composer install --no-interaction
+
+    - name: Execute Lint and Unit Tests
+      run: make test
+
+    - name: Run codecov
+      uses: codecov/codecov-action@v5
+      with:
+        files: './coverage.xml'
+        fail_ci_if_error: true
