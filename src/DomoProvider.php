@@ -2,52 +2,29 @@
 
 namespace Compwright\OAuth2\Domo;
 
-use League\OAuth2\Client\Provider\AbstractProvider;
+use League\OAuth2\Client\Provider\GenericProvider;
 use League\OAuth2\Client\Token\AccessToken;
 use League\OAuth2\Client\Token\ResourceOwnerAccessTokenInterface;
-use League\OAuth2\Client\Tool\BearerAuthorizationTrait;
 use Psr\Http\Message\ResponseInterface;
-use RuntimeException;
 
-class DomoProvider extends AbstractProvider
+/**
+ * @method DomoResourceOwner getResourceOwner(AccessToken $token)
+ */
+class DomoProvider extends GenericProvider
 {
-    use BearerAuthorizationTrait;
-
-    public string $apiDomain = 'https://api.domo.com';
-
-    public function getBaseAuthorizationUrl(): string
-    {
-        throw new RuntimeException('Authorization grant not supported');
-    }
+    public const ACCESS_TOKEN_RESOURCE_OWNER_ID = 'userId';
 
     /**
-     * Get access token url to retrieve token
-     *
-     * @param array<string, string> $params
+     * @inheritdoc
      */
-    public function getBaseAccessTokenUrl(array $params = []): string
+    protected function getScopeSeparator()
     {
-        return $this->apiDomain . '/oauth/token';
+        return ' ';
     }
 
     public function getResourceOwnerDetailsUrl(ResourceOwnerAccessTokenInterface $token): string
     {
-        return $this->apiDomain . '/v1/users/' . urlencode($token->getResourceOwnerId() ?? '');
-    }
-
-    /**
-     * Get the default scopes used by this provider.
-     *
-     * This should not be a complete list of all scopes, but the minimum
-     * required for the provider user interface!
-     *
-     * @return string[]
-     */
-    protected function getDefaultScopes(): array
-    {
-        return [
-            'data',
-        ];
+        return parent::getResourceOwnerDetailsUrl($token) . urlencode($token->getResourceOwnerId() ?? '');
     }
 
     /**
@@ -59,11 +36,11 @@ class DomoProvider extends AbstractProvider
      */
     protected function checkResponse(ResponseInterface $response, $data): void
     {
-        if ($response->getStatusCode() >= 400) {
-            throw DomoIdentityProviderException::clientException($response, $data);
-        }
         if (isset($data['error'])) {
             throw DomoIdentityProviderException::oauthException($response, $data);
+        }
+        if ($response->getStatusCode() >= 400) {
+            throw DomoIdentityProviderException::clientException($response, $data);
         }
     }
 
@@ -74,6 +51,6 @@ class DomoProvider extends AbstractProvider
      */
     protected function createResourceOwner(array $response, AccessToken $token): DomoResourceOwner
     {
-        return new DomoResourceOwner($response);
+        return new DomoResourceOwner($response, 'id');
     }
 }
