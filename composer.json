@@ -1,12 +1,12 @@
 {
-    "name": "compwright/oauth2-github",
+    "name": "compwright/oauth2-domo",
     "description": "Domo OAuth 2.0 Client Provider for The PHP League OAuth2-Client",
     "license": "MIT",
     "authors": [
         {
             "name": "Jonathon Hill",
             "email": "jonathon@compwright.com",
-            "homepage": "https://github.com/compwright"
+            "homepage": "https://compwright.com"
         }
     ],
     "keywords": [
